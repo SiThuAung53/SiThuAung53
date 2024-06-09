@@ -1,176 +1,45 @@
 {
-  "dns": {
-    "hosts": {
-      "domain:googleapis.cn": "googleapis.com"
-    },
-    "servers": [
-      "1.1.1.1",
-      {
-        "address": "223.5.5.5",
-        "domains": [
-          "geosite:cn",
-          "geosite:geolocation-cn"
-        ],
-        "expectIPs": [
-          "geoip:cn"
-        ],
-        "port": 53
-      }
-    ]
-  },
-  "inbounds": [
+  "version": "1.0.0",
+  "servers": [
     {
-      "listen": "127.0.0.1",
-      "port": 10808,
-      "protocol": "socks",
-      "settings": {
-        "auth": "noauth",
-        "udp": true,
-        "userLevel": 8
-      },
-      "sniffing": {
-        "destOverride": [
-          "http",
-          "tls"
-        ],
-        "enabled": true
-      },
-      "tag": "socks"
-    },
-    {
-      "listen": "127.0.0.1",
-      "port": 10809,
-      "protocol": "http",
-      "settings": {
-        "userLevel": 8
-      },
-      "tag": "http"
-    }
-  ],
-  "log": {
-    "loglevel": "warning"
-  },
-  "outbounds": [
-    {
-      "mux": {
-        "concurrency": -1,
-        "enabled": false,
-        "xudpConcurrency": 8,
-        "xudpProxyUDP443": ""
-      },
-      "protocol": "vmess",
-      "settings": {
-        "vnext": [
-          {
-            "address": "su29.nextprivate.cloud",
-            "port": 33742,
-            "users": [
+      "config": {
+        "inbounds": [{
+          "port": 10086,
+          "protocol": "vmess",
+          "settings": {
+            "clients": [
               {
-                "alterId": 0,
-                "encryption": "",
-                "flow": "",
-                "id": "cb576664-c876-45e5-b966-0eaa7c6a1a89",
-                "level": 8,
-                "security": "auto"
+                "id": "UUID-1",
+                "alterId": 64
               }
             ]
           }
-        ]
-      },
-      "streamSettings": {
-        "network": "ws",
-        "security": "none",
-        "wsSettings": {
-          "headers": {
-            "Host": ""
-          },
-          "path": "/"
-        }
-      },
-      "tag": "proxy"
-    },
-    {
-      "protocol": "freedom",
-      "settings": {},
-      "tag": "direct"
-    },
-    {
-      "protocol": "blackhole",
-      "settings": {
-        "response": {
-          "type": "http"
-        }
-      },
-      "tag": "block"
-    }
-  ],
-  "policy": {
-    "levels": {
-      "8": {
-        "connIdle": 300,
-        "downlinkOnly": 1,
-        "handshake": 4,
-        "uplinkOnly": 1
+        }],
+        "outbounds": [{
+          "protocol": "freedom",
+          "settings": {}
+        }]
       }
     },
-    "system": {
-      "statsOutboundUplink": true,
-      "statsOutboundDownlink": true
-    }
-  },
-  "remarks": "u29-4o18brve",
-  "routing": {
-    "domainStrategy": "IPIfNonMatch",
-    "rules": [
-      {
-        "ip": [
-          "1.1.1.1"
-        ],
-        "outboundTag": "proxy",
-        "port": "53"
-      },
-      {
-        "ip": [
-          "223.5.5.5"
-        ],
-        "outboundTag": "direct",
-        "port": "53"
-      },
-      {
-        "domain": [
-          "domain:googleapis.cn"
-        ],
-        "outboundTag": "proxy"
-      },
-      {
-        "ip": [
-          "geoip:private"
-        ],
-        "outboundTag": "direct"
-      },
-      {
-        "ip": [
-          "geoip:cn"
-        ],
-        "outboundTag": "direct"
-      },
-      {
-        "domain": [
-          "geosite:cn"
-        ],
-        "outboundTag": "direct"
-      },
-      {
-        "domain": [
-          "geosite:geolocation-cn"
-        ],
-        "outboundTag": "direct"
-      },
-      {
-        "outboundTag": "proxy",
-        "port": "0-65535"
+    {
+      "config": {
+        "inbounds": [{
+          "port": 10087,
+          "protocol": "vmess",
+          "settings": {
+            "clients": [
+              {
+                "id": "UUID-2",
+                "alterId": 64
+              }
+            ]
+          }
+        }],
+        "outbounds": [{
+          "protocol": "freedom",
+          "settings": {}
+        }]
       }
-    ]
-  },
-  "stats": {}
+    }
+  ]
 }
