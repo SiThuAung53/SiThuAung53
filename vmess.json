@@ -62,14 +62,14 @@
       "settings": {
         "vnext": [
           {
-            "address": "194.233.72.156",
-            "port": 56706,
+            "address": "su29.nextprivate.cloud",
+            "port": 33742,
             "users": [
               {
                 "alterId": 0,
                 "encryption": "",
                 "flow": "",
-                "id": "ecbf38d5-23b4-4572-8e7a-0c46a47bd951",
+                "id": "cb576664-c876-45e5-b966-0eaa7c6a1a89",
                 "level": 8,
                 "security": "auto"
               }
@@ -118,7 +118,7 @@
       "statsOutboundDownlink": true
     }
   },
-  "remarks": "u28-Key-45",
+  "remarks": "u29-4o18brve",
   "routing": {
     "domainStrategy": "IPIfNonMatch",
     "rules": [
