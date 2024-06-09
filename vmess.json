@@ -1,181 +1,96 @@
 {
-    "version": "1.0.0",
-    "servers": [
+  "log": {
+    "error": {
+      "level": "Debug",
+      "type": "Console"
+    },
+    "access": {
+      "type": "None"
+    }
+  },
+  "outbounds": [
+    {
+      "tag": "deny",
+      "protocol": "blackhole"
+    },
+    {
+      "tag": "direct",
+      "protocol": "freedom"
+    }
+  ],
+  "router": {
+    "domainStrategy": "AsIs",
+    "rule": [
       {
-        "config": {
-            "inbounds": [
-                {
-                  "listen": "127.0.0.1",
-                  "port": 10808,
-                  "protocol": "socks",
-                  "settings": {
-                    "auth": "noauth",
-                    "udp": true,
-                    "userLevel": 8
-                  },
-                  "sniffing": {
-                    "destOverride": [
-                      "http",
-                      "tls"
-                    ],
-                    "enabled": true
-                  },
-                  "tag": "socks"
-                },
-                {
-                  "listen": "127.0.0.1",
-                  "port": 10809,
-                  "protocol": "http",
-                  "settings": {
-                    "userLevel": 8
-                  },
-                  "tag": "http"
-                }
-              ],
-              "outbounds": [
-                {
-                  "mux": {
-                    "concurrency": -1,
-                    "enabled": false,
-                    "xudpConcurrency": 8,
-                    "xudpProxyUDP443": ""
-                  },
-                  "protocol": "vmess",
-                  "settings": {
-                    "vnext": [
-                      {
-                        "address": "su29.nextprivate.cloud",
-                        "port": 33742,
-                        "users": [
-                          {
-                            "alterId": 0,
-                            "encryption": "",
-                            "flow": "",
-                            "id": "cb576664-c876-45e5-b966-0eaa7c6a1a89",
-                            "level": 8,
-                            "security": "auto"
-                          }
-                        ]
-                      }
-                    ]
-                  },
-                  "streamSettings": {
-                    "network": "ws",
-                    "security": "none",
-                    "wsSettings": {
-                      "headers": {
-                        "Host": ""
-                      },
-                      "path": "/"
-                    }
-                  },
-                  "tag": "proxy"
-                },
-                {
-                  "protocol": "freedom",
-                  "settings": {},
-                  "tag": "direct"
-                },
-                {
-                  "protocol": "blackhole",
-                  "settings": {
-                    "response": {
-                      "type": "http"
-                    }
-                  },
-                  "tag": "block"
-                }
-              ]
-        }
+        "balancingTag": "subscriptions",
+        "inboundTag": [
+          "user-in"
+        ]
       },
       {
-        "config": {
-            "inbounds": [
-                {
-                  "listen": "127.0.0.1",
-                  "port": 10808,
-                  "protocol": "socks",
-                  "settings": {
-                    "auth": "noauth",
-                    "udp": true,
-                    "userLevel": 8
-                  },
-                  "sniffing": {
-                    "destOverride": [
-                      "http",
-                      "tls"
-                    ],
-                    "enabled": true
-                  },
-                  "tag": "socks"
-                },
-                {
-                  "listen": "127.0.0.1",
-                  "port": 10809,
-                  "protocol": "http",
-                  "settings": {
-                    "userLevel": 8
-                  },
-                  "tag": "http"
-                }
-              ],
-              "outbounds": [
-                {
-                  "mux": {
-                    "concurrency": -1,
-                    "enabled": false,
-                    "xudpConcurrency": 8,
-                    "xudpProxyUDP443": ""
-                  },
-                  "protocol": "vmess",
-                  "settings": {
-                    "vnext": [
-                      {
-                        "address": "su29.nextprivate.cloud",
-                        "port": 33742,
-                        "users": [
-                          {
-                            "alterId": 0,
-                            "encryption": "",
-                            "flow": "",
-                            "id": "cb576664-c876-45e5-b966-0eaa7c6a1a89",
-                            "level": 8,
-                            "security": "auto"
-                          }
-                        ]
-                      }
-                    ]
-                  },
-                  "streamSettings": {
-                    "network": "ws",
-                    "security": "none",
-                    "wsSettings": {
-                      "headers": {
-                        "Host": ""
-                      },
-                      "path": "/"
-                    }
-                  },
-                  "tag": "proxy"
-                },
-                {
-                  "protocol": "freedom",
-                  "settings": {},
-                  "tag": "direct"
-                },
-                {
-                  "protocol": "blackhole",
-                  "settings": {
-                    "response": {
-                      "type": "http"
-                    }
-                  },
-                  "tag": "block"
-                }
-              ]
-        }
+        "tag": "commander",
+        "inboundTag": [
+          "commander"
+        ]
       }
-      
+    ],
+    "balancingRule": [
+      {
+        "tag": "subscriptions",
+        "outbound_selector": [
+          "subscription_"
+        ],
+        "strategy": "leastping"
+      }
     ]
+  },
+  "inbounds": [
+    {
+      "tag": "user-in",
+      "protocol": "socks",
+      "settings": {
+        "udpEnabled": true,
+        "address": "127.0.0.1",
+        "packetEncoding": "Packet"
+      },
+      "port": 19828,
+      "listen": "127.0.0.1"
+    },
+    {
+      "tag": "commander",
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "127.0.0.1",
+        "port": 65535,
+        "networks": ["tcp"]
+      },
+      "port": 19829,
+      "listen": "127.0.0.1"
+    }
+  ],
+  "services": {
+    "backgroundObservatory": {
+      "subject_selector": [
+        "subscription_"
+      ],
+      "probe_interval": 5000000000
+    },
+    "subscription": {
+      "imports": [
+        {
+          "name": "VDA",
+          "url": "https://123",
+          "tagPrefix": "subscription_vda",
+          "importUsingTag": "direct",
+          "defaultExpireSeconds": 3600
+        }
+      ]
+    },
+    "commander": {
+      "tag": "commander",
+      "name": [
+        "observatory"
+      ]
+    }
   }
-  
+}
